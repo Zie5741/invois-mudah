@@ -1,0 +1,597 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Invois Mudah</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap">
+<style>
+/* Layout: borang di kiri, pratonton invois di kanan (skrin lebar); tab pada telefon */
+:root {
+  --bg: #F1F4F3;
+  --surface: #FFFFFF;
+  --fg: #13211F;
+  --muted: #566764;
+  --line: #D6DFDD;
+  --accent: #0B6E5F;
+  --accent-fg: #FFFFFF;
+  --accent-soft: #DDF0EB;
+  --paid: #0B6E5F;
+  --unpaid: #B45309;
+  --danger: #B42318;
+  --font-display: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0E1615;
+    --surface: #162220;
+    --fg: #E8F0EE;
+    --muted: #9BB0AB;
+    --line: #2A3A37;
+    --accent: #3DD1B5;
+    --accent-fg: #06201B;
+    --accent-soft: #17342F;
+    --paid: #3DD1B5;
+    --unpaid: #F5A524;
+    --danger: #F97066;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0E1615;
+  --surface: #162220;
+  --fg: #E8F0EE;
+  --muted: #9BB0AB;
+  --line: #2A3A37;
+  --accent: #3DD1B5;
+  --accent-fg: #06201B;
+  --accent-soft: #17342F;
+  --paid: #3DD1B5;
+  --unpaid: #F5A524;
+  --danger: #F97066;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.5;
+  padding-block: 16px 32px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 1080px; margin: 0 auto; }
+h1, h2, h3 { font-family: var(--font-display); margin: 0; text-wrap: balance; }
+button, input, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+.brand { display: flex; align-items: center; gap: 10px; }
+.brand svg { width: 30px; height: 30px; flex: none; }
+.brand h1 { font-size: 1.35rem; letter-spacing: -0.01em; }
+.tabs { display: flex; gap: 4px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 3px; }
+.tabs button { border: 0; background: transparent; padding: 7px 14px; border-radius: 8px; cursor: pointer; color: var(--muted); font-weight: 500; }
+.tabs button[aria-selected="true"] { background: var(--accent); color: var(--accent-fg); }
+
+.note { margin: 0 0 14px; padding: 10px 12px; border: 1px dashed var(--line); border-radius: 8px; color: var(--muted); font-size: 0.875rem; }
+
+main { display: block; }
+.panel { display: none; min-width: 0; }
+main[data-tab="form"] #panel-form,
+main[data-tab="preview"] #panel-preview,
+main[data-tab="history"] #panel-history { display: block; }
+
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 14px; }
+.card h2 { font-size: 1.02rem; margin-bottom: 12px; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
+.field { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.field label, .lbl { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 600; }
+input[type="text"], input[type="tel"], input[type="number"], input[type="date"], textarea {
+  width: 100%; min-width: 0; font-size: 16px; padding: 9px 10px;
+  background: var(--bg); border: 1px solid var(--line); border-radius: 8px;
+}
+textarea { resize: vertical; min-height: 56px; }
+input::placeholder, textarea::placeholder { color: var(--muted); opacity: 0.7; }
+
+.item { border-top: 1px solid var(--line); padding-top: 12px; margin-top: 12px; display: grid; gap: 8px; }
+.item:first-of-type { border-top: 0; padding-top: 0; margin-top: 0; }
+.item-row { display: grid; grid-template-columns: 4.5rem minmax(0, 1fr) auto auto; gap: 8px; align-items: end; }
+.line-total { font-variant-numeric: tabular-nums; font-weight: 600; padding-bottom: 9px; min-width: 6.5ch; text-align: right; }
+.icon-btn { border: 1px solid var(--line); background: transparent; border-radius: 8px; width: 38px; height: 38px; cursor: pointer; color: var(--muted); font-size: 1.1rem; line-height: 1; }
+.icon-btn:hover { color: var(--danger); border-color: var(--danger); }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 10px 16px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); cursor: pointer; font-weight: 600; text-decoration: none; color: var(--fg); }
+.btn:hover { border-color: var(--accent); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); }
+.btn.ghost { background: transparent; }
+.btn.small { padding: 6px 10px; font-size: 0.85rem; border-radius: 8px; }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.opts { display: flex; flex-wrap: wrap; gap: 14px 20px; align-items: center; }
+.opts label.inline { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; text-transform: none; letter-spacing: 0; font-size: 0.95rem; color: var(--fg); font-weight: 500; }
+.opts input[type="radio"], .opts input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--accent); }
+
+.sumbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
+.sumbar .big { font-family: var(--font-display); font-size: 1.6rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.sumbar .small-lbl { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 600; }
+
+/* Dokumen invois */
+.doc { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 20px; margin-bottom: 14px; }
+.doc-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; padding-bottom: 14px; border-bottom: 2px solid var(--fg); }
+.doc-biz { font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; }
+.doc-sub { color: var(--muted); font-size: 0.9rem; }
+.doc-meta { text-align: right; font-variant-numeric: tabular-nums; font-size: 0.9rem; }
+.doc-title { font-family: var(--font-display); font-weight: 700; letter-spacing: 0.14em; color: var(--accent); }
+.doc-to { display: flex; flex-direction: column; gap: 2px; padding: 14px 0; }
+.tbl-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+th { text-align: left; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); padding: 6px 6px; border-bottom: 1px solid var(--line); }
+td { padding: 8px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th.num, td.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+td.desc { overflow-wrap: anywhere; }
+.totals { margin: 12px 0 0 auto; max-width: 280px; display: grid; gap: 4px; font-variant-numeric: tabular-nums; }
+.totals div { display: flex; justify-content: space-between; gap: 16px; }
+.totals .grand { border-top: 2px solid var(--fg); padding-top: 6px; margin-top: 4px; font-family: var(--font-display); font-size: 1.2rem; font-weight: 700; }
+.doc-foot { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 14px; margin-top: 18px; }
+.pay { font-size: 0.88rem; color: var(--muted); max-width: 34ch; white-space: pre-line; }
+.pay strong { color: var(--fg); display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; }
+.stamp { display: inline-block; border: 3px solid currentColor; border-radius: 6px; padding: 4px 12px; font-family: var(--font-display); font-weight: 700; letter-spacing: 0.1em; transform: rotate(-5deg); font-size: 1.05rem; }
+.stamp.unpaid { color: var(--unpaid); }
+.stamp.paid { color: var(--paid); }
+.thanks { margin-top: 14px; color: var(--muted); font-size: 0.85rem; }
+
+/* Sejarah */
+.hist { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.hist li { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; padding: 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+.hist .who { min-width: 0; }
+.hist .who strong { display: block; overflow-wrap: anywhere; }
+.hist .who span { color: var(--muted); font-size: 0.85rem; font-variant-numeric: tabular-nums; }
+.hist .right { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.pill { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 0.78rem; font-weight: 600; border: 1px solid currentColor; }
+.pill.paid { color: var(--paid); }
+.pill.unpaid { color: var(--unpaid); }
+.empty { padding: 18px; border: 1px dashed var(--line); border-radius: 10px; color: var(--muted); text-align: center; }
+
+#copy-fallback { margin-top: 10px; }
+#toast {
+  position: fixed; left: 0; right: 0; bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex; justify-content: center; pointer-events: none; opacity: 0; transition: opacity 0.2s;
+}
+#toast.show { opacity: 1; }
+#toast span { background: var(--fg); color: var(--bg); padding: 9px 16px; border-radius: 999px; font-weight: 500; font-size: 0.9rem; }
+@media (prefers-reduced-motion: reduce) { #toast { transition: none; } }
+
+@media (min-width: 900px) {
+  .tabs { display: none; }
+  main { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; align-items: start; }
+  .panel { display: block; }
+  #panel-history { grid-column: 1 / -1; }
+  #to-preview { display: none; }
+}
+@media (max-width: 420px) {
+  .item-row { grid-template-columns: 4rem minmax(0, 1fr) auto; }
+  .item-row .line-total { grid-column: 2 / 3; text-align: left; padding-bottom: 0; }
+  .item-row .icon-btn { grid-column: 3 / 4; grid-row: 1 / 2; }
+}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="2" width="26" height="28" rx="6" fill="#0B6E5F"/><rect x="8" y="9" width="16" height="2.4" rx="1.2" fill="#FFFFFF"/><rect x="8" y="14.8" width="16" height="2.4" rx="1.2" fill="#FFFFFF"/><rect x="8" y="20.6" width="9" height="2.4" rx="1.2" fill="#FFFFFF"/></svg>
+      <h1>Invois Mudah</h1>
+    </div>
+    <nav class="tabs" role="tablist" aria-label="Bahagian">
+      <button role="tab" id="tab-form" data-go="form" aria-selected="true">Buat</button>
+      <button role="tab" id="tab-preview" data-go="preview" aria-selected="false">Pratonton</button>
+      <button role="tab" id="tab-history" data-go="history" aria-selected="false">Sejarah</button>
+    </nav>
+  </header>
+
+  <p class="note">Data contoh sudah diisi supaya anda nampak hasilnya. Tukar kepada maklumat kedai anda. Maklumat kedai dan sejarah invois disimpan dalam pelayar ini sahaja.</p>
+
+  <main id="main" data-tab="form">
+    <section class="panel" id="panel-form" aria-label="Borang invois">
+      <div class="card">
+        <h2>Maklumat kedai</h2>
+        <div class="grid2">
+          <div class="field"><label for="biz-name">Nama kedai</label><input type="text" id="biz-name" autocomplete="off" placeholder="Contoh: Kedai Kek Kak Min"></div>
+          <div class="field"><label for="biz-phone">No. telefon</label><input type="tel" id="biz-phone" autocomplete="off" placeholder="012-345 6789"></div>
+        </div>
+        <div class="field" style="margin-top:12px"><label for="biz-pay">Maklumat bayaran</label><textarea id="biz-pay" placeholder="Bank, no. akaun atau DuitNow"></textarea></div>
+      </div>
+
+      <div class="card">
+        <h2>Pelanggan</h2>
+        <div class="grid2">
+          <div class="field"><label for="cust-name">Nama pelanggan</label><input type="text" id="cust-name" autocomplete="off" placeholder="Nama pelanggan"></div>
+          <div class="field"><label for="cust-phone">No. WhatsApp</label><input type="tel" id="cust-phone" autocomplete="off" placeholder="019-876 5432"></div>
+          <div class="field"><label for="inv-no">No. invois</label><input type="text" id="inv-no" readonly></div>
+          <div class="field"><label for="inv-date">Tarikh</label><input type="date" id="inv-date"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Barang dan perkhidmatan</h2>
+        <div id="items"></div>
+        <div class="actions" style="margin-top:14px"><button class="btn small" type="button" id="add-item">+ Tambah barang</button></div>
+      </div>
+
+      <div class="card">
+        <h2>Diskaun, cukai dan bayaran</h2>
+        <div class="grid2">
+          <div class="field"><label for="inv-discount">Diskaun (RM)</label><input type="number" id="inv-discount" inputmode="decimal" min="0" step="0.01" placeholder="0.00"></div>
+        </div>
+        <div class="opts" style="margin-top:14px">
+          <label class="inline" for="inv-sst"><input type="checkbox" id="inv-sst"> Tambah SST 6%</label>
+        </div>
+        <div class="opts" style="margin-top:12px" role="radiogroup" aria-label="Status bayaran">
+          <label class="inline" for="st-unpaid"><input type="radio" name="status" id="st-unpaid" value="unpaid"> Belum bayar</label>
+          <label class="inline" for="st-paid"><input type="radio" name="status" id="st-paid" value="paid"> Dah bayar</label>
+        </div>
+      </div>
+
+      <div class="card sumbar">
+        <div><div class="small-lbl">Jumlah semasa</div><div class="big" id="live-total">RM 0.00</div></div>
+        <button class="btn primary" type="button" id="to-preview">Lihat invois</button>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-preview" aria-label="Pratonton invois">
+      <div id="doc" class="doc"></div>
+      <div class="actions">
+        <a class="btn primary" id="wa" href="https://wa.me/" target="_blank" rel="noopener">Hantar ke WhatsApp</a>
+        <button class="btn" type="button" id="copy">Salin teks invois</button>
+        <button class="btn" type="button" id="save">Simpan invois</button>
+        <button class="btn ghost" type="button" id="new">Invois baru</button>
+      </div>
+      <textarea id="copy-fallback" rows="8" readonly hidden aria-label="Teks invois untuk disalin"></textarea>
+      <p class="thanks">Muat turun PDF akan ada dalam versi penuh di laman anda sendiri. Buat masa ini, hantar terus melalui WhatsApp atau salin teks.</p>
+    </section>
+
+    <section class="panel" id="panel-history" aria-label="Sejarah invois">
+      <div class="card">
+        <h2>Sejarah invois</h2>
+        <ul class="hist" id="hist"></ul>
+      </div>
+    </section>
+  </main>
+</div>
+<div id="toast" role="status" aria-live="polite"><span id="toast-text"></span></div>
+
+<script>
+(function () {
+  var KEY = "invoisMudah.v1";
+  var MONTHS = ["Jan", "Feb", "Mac", "Apr", "Mei", "Jun", "Jul", "Ogo", "Sep", "Okt", "Nov", "Dis"];
+  var store = { biz: null, counter: 1, history: [] };
+
+  function loadStore() {
+    try {
+      var raw = localStorage.getItem(KEY);
+      if (!raw) return;
+      var d = JSON.parse(raw);
+      if (d && typeof d === "object") {
+        store.biz = d.biz || null;
+        store.counter = Number(d.counter) || 1;
+        store.history = Array.isArray(d.history) ? d.history : [];
+      }
+    } catch (e) {}
+  }
+  function saveStore() {
+    try { localStorage.setItem(KEY, JSON.stringify(store)); } catch (e) {}
+  }
+
+  function $(id) { return document.getElementById(id); }
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+  function num(v) {
+    var n = parseFloat(String(v).replace(",", "."));
+    return isFinite(n) && n > 0 ? n : 0;
+  }
+  function rm(n) {
+    return "RM " + n.toLocaleString("en-MY", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+  function pad(n) { return (n < 10 ? "00" : n < 100 ? "0" : "") + n; }
+  function invNo(n) { return "INV-" + pad(n); }
+  function todayISO() {
+    var d = new Date();
+    var m = d.getMonth() + 1, day = d.getDate();
+    return d.getFullYear() + "-" + (m < 10 ? "0" : "") + m + "-" + (day < 10 ? "0" : "") + day;
+  }
+  function fmtDate(iso) {
+    var p = String(iso || "").split("-");
+    if (p.length !== 3) return "";
+    return parseInt(p[2], 10) + " " + MONTHS[parseInt(p[1], 10) - 1] + " " + p[0];
+  }
+  function waNumber(p) {
+    var d = String(p || "").replace(/\D/g, "");
+    if (!d) return "";
+    if (d.indexOf("0") === 0) d = "6" + d;
+    else if (d.indexOf("60") !== 0) d = "60" + d;
+    return d;
+  }
+
+  var uid = 0;
+  function newItem(desc, qty, price) { return { id: ++uid, desc: desc || "", qty: qty == null ? 1 : qty, price: price || 0 }; }
+
+  var biz = { name: "Kedai Kek Kak Min", phone: "012-345 6789", pay: "Maybank 5144 0000 0000\nKedai Kek Kak Min" };
+  var state = {
+    no: "", date: todayISO(),
+    cust: { name: "Aisyah Rahman", phone: "019-876 5432" },
+    items: [newItem("Kek lapis Sarawak 1kg", 2, 45), newItem("Brownies kotak (12 keping)", 1, 38), newItem("Penghantaran", 1, 8)],
+    discount: 0, sst: false, status: "unpaid"
+  };
+
+  function calc() {
+    var sub = 0;
+    state.items.forEach(function (i) { sub += num(i.qty) * num(i.price); });
+    var disc = Math.min(num(state.discount), sub);
+    var taxable = sub - disc;
+    var tax = state.sst ? Math.round(taxable * 6) / 100 : 0;
+    return { sub: sub, disc: disc, tax: tax, total: taxable + tax };
+  }
+
+  function visibleItems() {
+    return state.items.filter(function (i) { return i.desc.trim() || num(i.price) > 0; });
+  }
+
+  function buildText() {
+    var c = calc();
+    var lines = [];
+    lines.push("*INVOIS " + state.no + "*");
+    lines.push(biz.name || "");
+    lines.push("Tarikh: " + fmtDate(state.date));
+    if (state.cust.name) lines.push("Kepada: " + state.cust.name);
+    lines.push("");
+    visibleItems().forEach(function (i, idx) {
+      lines.push((idx + 1) + ". " + (i.desc || "Barang") + " x" + num(i.qty) + " = " + rm(num(i.qty) * num(i.price)));
+    });
+    lines.push("");
+    if (c.disc > 0 || c.tax > 0) lines.push("Subtotal: " + rm(c.sub));
+    if (c.disc > 0) lines.push("Diskaun: -" + rm(c.disc));
+    if (c.tax > 0) lines.push("SST 6%: " + rm(c.tax));
+    lines.push("*Jumlah: " + rm(c.total) + "*");
+    lines.push("Status: " + (state.status === "paid" ? "Dah bayar" : "Belum bayar"));
+    if (state.status !== "paid" && biz.pay) { lines.push(""); lines.push("Bayaran ke:"); lines.push(biz.pay); }
+    lines.push("");
+    lines.push("Terima kasih!");
+    return lines.join("\n");
+  }
+
+  function renderDoc() {
+    var c = calc();
+    var rows = visibleItems().map(function (i) {
+      return "<tr><td class=\"desc\">" + esc(i.desc || "Barang") + "</td><td class=\"num\">" + esc(num(i.qty)) +
+        "</td><td class=\"num\">" + rm(num(i.price)) + "</td><td class=\"num\">" + rm(num(i.qty) * num(i.price)) + "</td></tr>";
+    }).join("");
+    if (!rows) rows = "<tr><td colspan=\"4\" style=\"color:var(--muted)\">Belum ada barang. Tambah di tab Buat.</td></tr>";
+    var paid = state.status === "paid";
+    var html =
+      "<div class=\"doc-head\"><div><div class=\"doc-biz\">" + esc(biz.name || "Nama kedai") + "</div><div class=\"doc-sub\">" + esc(biz.phone) + "</div></div>" +
+      "<div class=\"doc-meta\"><div class=\"doc-title\">INVOIS</div><div>" + esc(state.no) + "</div><div>" + esc(fmtDate(state.date)) + "</div></div></div>" +
+      "<div class=\"doc-to\"><span class=\"lbl\">Kepada</span><strong>" + esc(state.cust.name || "Nama pelanggan") + "</strong><span class=\"doc-sub\">" + esc(state.cust.phone) + "</span></div>" +
+      "<div class=\"tbl-wrap\"><table><thead><tr><th>Perihal</th><th class=\"num\">Kuantiti</th><th class=\"num\">Harga</th><th class=\"num\">Jumlah</th></tr></thead><tbody>" + rows + "</tbody></table></div>" +
+      "<div class=\"totals\">" +
+      "<div><span>Subtotal</span><span>" + rm(c.sub) + "</span></div>" +
+      (c.disc > 0 ? "<div><span>Diskaun</span><span>-" + rm(c.disc) + "</span></div>" : "") +
+      (c.tax > 0 ? "<div><span>SST 6%</span><span>" + rm(c.tax) + "</span></div>" : "") +
+      "<div class=\"grand\"><span>Jumlah</span><span>" + rm(c.total) + "</span></div></div>" +
+      "<div class=\"doc-foot\"><div class=\"pay\">" + (biz.pay ? "<strong>Maklumat bayaran</strong>" + esc(biz.pay) : "") + "</div>" +
+      "<span class=\"stamp " + (paid ? "paid" : "unpaid") + "\">" + (paid ? "DAH BAYAR" : "BELUM BAYAR") + "</span></div>" +
+      "<p class=\"thanks\">Terima kasih atas tempahan anda.</p>";
+    $("doc").innerHTML = html;
+    $("live-total").textContent = rm(c.total);
+    var n = waNumber(state.cust.phone);
+    $("wa").href = "https://wa.me/" + n + "?text=" + encodeURIComponent(buildText());
+  }
+
+  function renderItems() {
+    var html = state.items.map(function (i) {
+      return "<div class=\"item\" data-id=\"" + i.id + "\">" +
+        "<div class=\"field\"><label for=\"it-" + i.id + "-desc\">Perihal</label><input type=\"text\" id=\"it-" + i.id + "-desc\" data-f=\"desc\" autocomplete=\"off\" placeholder=\"Nama barang atau perkhidmatan\" value=\"" + esc(i.desc) + "\"></div>" +
+        "<div class=\"item-row\">" +
+        "<div class=\"field\"><label for=\"it-" + i.id + "-qty\">Kuantiti</label><input type=\"number\" id=\"it-" + i.id + "-qty\" data-f=\"qty\" inputmode=\"decimal\" min=\"0\" step=\"any\" value=\"" + esc(i.qty) + "\"></div>" +
+        "<div class=\"field\"><label for=\"it-" + i.id + "-price\">Harga seunit (RM)</label><input type=\"number\" id=\"it-" + i.id + "-price\" data-f=\"price\" inputmode=\"decimal\" min=\"0\" step=\"0.01\" value=\"" + (i.price ? esc(i.price) : "") + "\" placeholder=\"0.00\"></div>" +
+        "<div class=\"line-total\" data-line=\"" + i.id + "\">" + rm(num(i.qty) * num(i.price)) + "</div>" +
+        "<button type=\"button\" class=\"icon-btn\" data-remove=\"" + i.id + "\" aria-label=\"Buang barang\">&times;</button>" +
+        "</div></div>";
+    }).join("");
+    $("items").innerHTML = html;
+  }
+
+  function fillForm() {
+    $("biz-name").value = biz.name;
+    $("biz-phone").value = biz.phone;
+    $("biz-pay").value = biz.pay;
+    $("cust-name").value = state.cust.name;
+    $("cust-phone").value = state.cust.phone;
+    $("inv-no").value = state.no;
+    $("inv-date").value = state.date;
+    $("inv-discount").value = state.discount ? state.discount : "";
+    $("inv-sst").checked = !!state.sst;
+    $("st-unpaid").checked = state.status !== "paid";
+    $("st-paid").checked = state.status === "paid";
+    renderItems();
+    renderDoc();
+  }
+
+  function toast(msg) {
+    var t = $("toast");
+    $("toast-text").textContent = msg;
+    t.classList.add("show");
+    clearTimeout(toast._t);
+    toast._t = setTimeout(function () { t.classList.remove("show"); }, 2200);
+  }
+
+  function setTab(name) {
+    $("main").setAttribute("data-tab", name);
+    ["form", "preview", "history"].forEach(function (n) {
+      $("tab-" + n).setAttribute("aria-selected", n === name ? "true" : "false");
+    });
+    window.scrollTo(0, 0);
+  }
+
+  function renderHistory() {
+    var ul = $("hist");
+    if (!store.history.length) {
+      ul.innerHTML = "<li class=\"empty\" style=\"display:block\">Belum ada invois disimpan. Tekan Simpan invois pada tab Pratonton.</li>";
+      return;
+    }
+    ul.innerHTML = store.history.map(function (h, idx) {
+      var paid = h.status === "paid";
+      return "<li><div class=\"who\"><strong>" + esc(h.cust && h.cust.name ? h.cust.name : "Tanpa nama") + "</strong><span>" + esc(h.no) + " &middot; " + esc(fmtDate(h.date)) + " &middot; " + rm(h.total || 0) + "</span></div>" +
+        "<div class=\"right\"><span class=\"pill " + (paid ? "paid" : "unpaid") + "\">" + (paid ? "Dah bayar" : "Belum bayar") + "</span>" +
+        "<button class=\"btn small\" type=\"button\" data-toggle=\"" + idx + "\">" + (paid ? "Tanda belum bayar" : "Tanda dah bayar") + "</button>" +
+        "<button class=\"btn small\" type=\"button\" data-open=\"" + idx + "\">Buka</button>" +
+        "<button class=\"btn small ghost\" type=\"button\" data-del=\"" + idx + "\">Padam</button></div></li>";
+    }).join("");
+  }
+
+  function snapshot() {
+    return {
+      no: state.no, date: state.date, cust: { name: state.cust.name, phone: state.cust.phone },
+      items: state.items.map(function (i) { return { desc: i.desc, qty: i.qty, price: i.price }; }),
+      discount: state.discount, sst: state.sst, status: state.status, total: calc().total
+    };
+  }
+
+  function saveInvoice() {
+    var snap = snapshot();
+    var at = -1;
+    store.history.forEach(function (h, i) { if (h.no === snap.no) at = i; });
+    if (at >= 0) store.history[at] = snap; else store.history.unshift(snap);
+    var n = parseInt(String(state.no).replace(/\D/g, ""), 10) || 0;
+    if (n >= store.counter) store.counter = n + 1;
+    saveStore();
+    renderHistory();
+    toast("Invois " + state.no + " disimpan");
+  }
+
+  function newInvoice() {
+    state.no = invNo(store.counter);
+    state.date = todayISO();
+    state.cust = { name: "", phone: "" };
+    state.items = [newItem("", 1, 0)];
+    state.discount = 0; state.sst = false; state.status = "unpaid";
+    fillForm();
+    setTab("form");
+    toast("Invois baru " + state.no);
+  }
+
+  function saveBiz() {
+    store.biz = { name: biz.name, phone: biz.phone, pay: biz.pay };
+    saveStore();
+  }
+
+  /* Peristiwa */
+  document.addEventListener("click", function (e) {
+    var t = e.target;
+    if (!(t instanceof Element)) return;
+    var go = t.closest("[data-go]");
+    if (go) { setTab(go.getAttribute("data-go")); return; }
+    var rem = t.closest("[data-remove]");
+    if (rem) {
+      var rid = Number(rem.getAttribute("data-remove"));
+      state.items = state.items.filter(function (i) { return i.id !== rid; });
+      if (!state.items.length) state.items.push(newItem("", 1, 0));
+      renderItems(); renderDoc();
+      return;
+    }
+    var tg = t.closest("[data-toggle]");
+    if (tg) {
+      var h = store.history[Number(tg.getAttribute("data-toggle"))];
+      if (h) { h.status = h.status === "paid" ? "unpaid" : "paid"; saveStore(); renderHistory(); }
+      return;
+    }
+    var op = t.closest("[data-open]");
+    if (op) {
+      var s = store.history[Number(op.getAttribute("data-open"))];
+      if (s) {
+        state.no = s.no; state.date = s.date;
+        state.cust = { name: s.cust.name || "", phone: s.cust.phone || "" };
+        state.items = s.items.map(function (i) { return newItem(i.desc, i.qty, i.price); });
+        if (!state.items.length) state.items.push(newItem("", 1, 0));
+        state.discount = s.discount || 0; state.sst = !!s.sst; state.status = s.status || "unpaid";
+        fillForm(); setTab("preview");
+      }
+      return;
+    }
+    var dl = t.closest("[data-del]");
+    if (dl) {
+      if (dl.getAttribute("data-armed") === "1") {
+        store.history.splice(Number(dl.getAttribute("data-del")), 1);
+        saveStore(); renderHistory();
+      } else {
+        dl.setAttribute("data-armed", "1");
+        dl.textContent = "Pasti padam?";
+        setTimeout(function () { if (dl.isConnected) { dl.removeAttribute("data-armed"); dl.textContent = "Padam"; } }, 3000);
+      }
+    }
+  });
+
+  $("items").addEventListener("input", function (e) {
+    var el = e.target;
+    var row = el.closest("[data-id]");
+    if (!row) return;
+    var id = Number(row.getAttribute("data-id"));
+    var f = el.getAttribute("data-f");
+    var item = state.items.filter(function (i) { return i.id === id; })[0];
+    if (!item || !f) return;
+    item[f] = el.value;
+    var cell = row.querySelector("[data-line]");
+    if (cell) cell.textContent = rm(num(item.qty) * num(item.price));
+    renderDoc();
+  });
+
+  $("add-item").addEventListener("click", function () {
+    var it = newItem("", 1, 0);
+    state.items.push(it);
+    renderItems(); renderDoc();
+    var el = $("it-" + it.id + "-desc");
+    if (el) el.focus();
+  });
+
+  [["biz-name", "name"], ["biz-phone", "phone"], ["biz-pay", "pay"]].forEach(function (p) {
+    $(p[0]).addEventListener("input", function (e) { biz[p[1]] = e.target.value; saveBiz(); renderDoc(); });
+  });
+  $("cust-name").addEventListener("input", function (e) { state.cust.name = e.target.value; renderDoc(); });
+  $("cust-phone").addEventListener("input", function (e) { state.cust.phone = e.target.value; renderDoc(); });
+  $("inv-date").addEventListener("input", function (e) { state.date = e.target.value || todayISO(); renderDoc(); });
+  $("inv-discount").addEventListener("input", function (e) { state.discount = e.target.value; renderDoc(); });
+  $("inv-sst").addEventListener("change", function (e) { state.sst = e.target.checked; renderDoc(); });
+  $("st-unpaid").addEventListener("change", function () { state.status = "unpaid"; renderDoc(); });
+  $("st-paid").addEventListener("change", function () { state.status = "paid"; renderDoc(); });
+
+  $("to-preview").addEventListener("click", function () { setTab("preview"); });
+  $("save").addEventListener("click", saveInvoice);
+  $("new").addEventListener("click", newInvoice);
+
+  $("copy").addEventListener("click", function () {
+    var text = buildText();
+    var fb = $("copy-fallback");
+    function fallback() {
+      fb.hidden = false; fb.value = text; fb.focus(); fb.select();
+      toast("Tekan lama pada teks untuk salin");
+    }
+    try {
+      navigator.clipboard.writeText(text).then(function () { fb.hidden = true; toast("Teks invois disalin"); }, fallback);
+    } catch (err) { fallback(); }
+  });
+
+  /* Mula */
+  loadStore();
+  if (store.biz) { biz.name = store.biz.name || ""; biz.phone = store.biz.phone || ""; biz.pay = store.biz.pay || ""; }
+  state.no = invNo(store.counter);
+  fillForm();
+  renderHistory();
+})();
+</script>
+
+</body></html>
