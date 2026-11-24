@@ -1,6 +1,14 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html>
+<html lang="ms">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{color-scheme:light}body{margin:0}[hidden]{display:none!important}</style>
 <title>Invois Mudah</title>
-<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="App invois percuma untuk peniaga kecil. Buat invois dalam 30 saat dan hantar terus ke WhatsApp pelanggan.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Invois Mudah">
+<meta property="og:description" content="Buat invois dalam 30 saat dan hantar terus ke WhatsApp pelanggan. Percuma untuk cuba.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap">
@@ -177,8 +185,18 @@ td.desc { overflow-wrap: anywhere; }
   .item-row .line-total { grid-column: 2 / 3; text-align: left; padding-bottom: 0; }
   .item-row .icon-btn { grid-column: 3 / 4; grid-row: 1 / 2; }
 }
+@media print {
+  html:root:root { --bg: #FFFFFF; --surface: #FFFFFF; --fg: #111111; --muted: #555555; --line: #CCCCCC; --accent: #0B6E5F; --paid: #0B6E5F; --unpaid: #B45309; color-scheme: light; }
+  body { background: #FFFFFF; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .top, .note, #panel-form, #panel-history, .actions, #panel-preview > .thanks, #toast, #copy-fallback { display: none !important; }
+  main { display: block !important; }
+  #panel-preview { display: block !important; }
+  .wrap { max-width: none; }
+  .doc { border: 0; padding: 0; margin: 0; }
+}
 </style>
-
+</head>
+<body>
 <div class="wrap">
   <header class="top">
     <div class="brand">
@@ -245,12 +263,13 @@ td.desc { overflow-wrap: anywhere; }
       <div id="doc" class="doc"></div>
       <div class="actions">
         <a class="btn primary" id="wa" href="https://wa.me/" target="_blank" rel="noopener">Hantar ke WhatsApp</a>
+        <button class="btn" type="button" id="pdf">Simpan PDF</button>
         <button class="btn" type="button" id="copy">Salin teks invois</button>
-        <button class="btn" type="button" id="save">Simpan invois</button>
+        <button class="btn" type="button" id="save">Simpan ke sejarah</button>
         <button class="btn ghost" type="button" id="new">Invois baru</button>
       </div>
       <textarea id="copy-fallback" rows="8" readonly hidden aria-label="Teks invois untuk disalin"></textarea>
-      <p class="thanks">Muat turun PDF akan ada dalam versi penuh di laman anda sendiri. Buat masa ini, hantar terus melalui WhatsApp atau salin teks.</p>
+      <p class="thanks">Untuk PDF, tekan Simpan PDF dan pilih "Simpan sebagai PDF" pada skrin cetak. Atau hantar terus melalui WhatsApp.</p>
     </section>
 
     <section class="panel" id="panel-history" aria-label="Sejarah invois">
@@ -441,7 +460,7 @@ td.desc { overflow-wrap: anywhere; }
   function renderHistory() {
     var ul = $("hist");
     if (!store.history.length) {
-      ul.innerHTML = "<li class=\"empty\" style=\"display:block\">Belum ada invois disimpan. Tekan Simpan invois pada tab Pratonton.</li>";
+      ul.innerHTML = "<li class=\"empty\" style=\"display:block\">Belum ada invois disimpan. Tekan Simpan ke sejarah pada tab Pratonton.</li>";
       return;
     }
     ul.innerHTML = store.history.map(function (h, idx) {
@@ -570,6 +589,12 @@ td.desc { overflow-wrap: anywhere; }
   $("st-paid").addEventListener("change", function () { state.status = "paid"; renderDoc(); });
 
   $("to-preview").addEventListener("click", function () { setTab("preview"); });
+  $("pdf").addEventListener("click", function () {
+    var old = document.title;
+    document.title = state.no || old;
+    window.addEventListener("afterprint", function () { document.title = old; }, { once: true });
+    try { window.print(); } catch (err) { document.title = old; toast("Cetak tidak disokong. Guna Salin teks."); }
+  });
   $("save").addEventListener("click", saveInvoice);
   $("new").addEventListener("click", newInvoice);
 
@@ -593,5 +618,5 @@ td.desc { overflow-wrap: anywhere; }
   renderHistory();
 })();
 </script>
-
-</body></html>
+</body>
+</html>
